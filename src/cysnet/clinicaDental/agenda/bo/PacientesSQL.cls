@@ -21,7 +21,7 @@ Method nuevoPaciente(pRequest As cysnet.clinicaDental.agenda.msg.CrearPacienteRe
 
     Try {
         set rs = ##class(EnsLib.SQL.GatewayResultSet).%New()
-        set sqlObtenerEmail = "SELECT Email FROM cysnet_clinicaDental_data.Pacientes WHERE Email = ?"
+        set sqlObtenerEmail = "SELECT Email FROM ClinicaDental.Paciente WHERE Email = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerEmail, pRequest.email)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
@@ -36,7 +36,7 @@ Method nuevoPaciente(pRequest As cysnet.clinicaDental.agenda.msg.CrearPacienteRe
         
         set permiteNotificaciones = 1
         set baja = 0
-        set sqlInsertarPaciente = "INSERT INTO cysnet_clinicaDental_data.Pacientes (Nombre, Apellidos, Email, PermiteNotificaciones, Baja) VALUES (?, ?, ?, ?, ?)"
+        set sqlInsertarPaciente = "INSERT INTO ClinicaDental.Paciente (Nombre, Apellidos, Email, PermiteNotificaciones, Baja) VALUES (?, ?, ?, ?, ?)"
         set sc = ..Adapter.ExecuteUpdate(.numRows, sqlInsertarPaciente, pRequest.nombre, pRequest.apellidos, pRequest.email, permiteNotificaciones, baja)
         
         // Revisa si la sentencia se ejecuta bien
@@ -96,13 +96,13 @@ Method bajaPaciente(pRequest As cysnet.clinicaDental.agenda.msg.BajaPacienteRequ
 
     Try {
         set rs = ##class(EnsLib.SQL.GatewayResultSet).%New()
-        set sqlObtenerEmail = "SELECT Email FROM cysnet_clinicaDental_data.Pacientes WHERE Email = ?"
+        set sqlObtenerEmail = "SELECT Email FROM ClinicaDental.Paciente WHERE Email = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerEmail, pRequest.email)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
                 // El correo electrónico existe
                 // Hacer el update del campo baja a 1
-                set sqlBajaPaciente = "UPDATE cysnet_clinicaDental_data.Pacientes SET Baja = 1 WHERE Email = ?"
+                set sqlBajaPaciente = "UPDATE Paciente SET Baja = 1 WHERE Email = ?"
                 set sc = ..Adapter.ExecuteUpdate(.numRows, sqlBajaPaciente, pRequest.email)
                 if ($$$ISOK(sc)) {
                     set pResponse.mensaje = "Paciente con el correo "_pRequest.email_" ha sido dado de baja"
@@ -145,7 +145,7 @@ Method modificarPaciente(pRequest As cysnet.clinicaDental.agenda.msg.ModificarPa
 
     Try {
         set rs = ##class(EnsLib.SQL.GatewayResultSet).%New()
-        set sqlObtenerEmail = "SELECT Email FROM cysnet_clinicaDental_data.Pacientes WHERE Email = ?"
+        set sqlObtenerEmail = "SELECT Email FROM ClinicaDental.Paciente WHERE Email = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerEmail, pRequest.emailNuevo)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
@@ -157,7 +157,7 @@ Method modificarPaciente(pRequest As cysnet.clinicaDental.agenda.msg.ModificarPa
             }
         }
 
-        set sqlModPaciente = "UPDATE cysnet_clinicaDental_data.Pacientes SET Nombre = ? , Apellidos = ? , Email = ? , PermiteNotificaciones = ? WHERE Email = ?"
+        set sqlModPaciente = "UPDATE ClinicaDental.Paciente SET Nombre = ? , Apellidos = ? , Email = ? , PermiteNotificaciones = ? WHERE Email = ?"
 
         set sc = ..Adapter.ExecuteUpdate(.numRows, sqlModPaciente, pRequest.nombreNuevo, pRequest.apellidosNuevo, pRequest.emailNuevo, pRequest.permiteNotificaciones, pRequest.emailActual)
         if ($$$ISOK(sc)) {
@@ -207,10 +207,10 @@ Method listarPacientes(pRequest As cysnet.clinicaDental.agenda.msg.ListarPacient
 
         if (pRequest.mostrarBajas) {
 
-            set sqlListaPacientes = "SELECT * FROM cysnet_clinicaDental_data.Pacientes"
+            set sqlListaPacientes = "SELECT * FROM ClinicaDental.Paciente"
 
         } else {
-            set sqlListaPacientes = "SELECT * FROM cysnet_clinicaDental_data.Pacientes WHERE Baja = 0"
+            set sqlListaPacientes = "SELECT * FROM ClinicaDental.Paciente WHERE Baja = 0"
         }
         
         set sc = ..Adapter.ExecuteQuery(.rs, sqlListaPacientes)
@@ -263,7 +263,7 @@ Method buscarPacientePorID(pRequest As cysnet.clinicaDental.agenda.msg.BuscarPac
 
     Try {
 
-        set sqlPacientePorID = "SELECT * FROM cysnet_clinicaDental_data.Pacientes WHERE ID = ?"
+        set sqlPacientePorID = "SELECT * FROM ClinicaDental.Paciente WHERE ID = ?"
         
         set sc = ..Adapter.ExecuteQuery(.rs, sqlPacientePorID, pRequest.id)
         if ($$$ISOK(sc)) {

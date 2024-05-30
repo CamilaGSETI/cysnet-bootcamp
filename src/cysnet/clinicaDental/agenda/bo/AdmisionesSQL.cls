@@ -21,7 +21,7 @@ Method admitirPaciente(pRequest As cysnet.clinicaDental.agenda.msg.AdmitirPacien
 
     Try {
 
-        set sqlObtenerAdmision = "SELECT idCita FROM cysnet_clinicaDental_data.Admisiones WHERE idCita = ?"
+        set sqlObtenerAdmision = "SELECT idCita FROM ClinicaDental.Admision WHERE idCita = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerAdmision, pRequest.idCita)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
@@ -34,7 +34,7 @@ Method admitirPaciente(pRequest As cysnet.clinicaDental.agenda.msg.AdmitirPacien
 
         // Si la cita no se encuentra registrada entonces la crea
         set indEnviada = 0
-        set sqlInsertarAdmision = "INSERT INTO cysnet_clinicaDental_data.Admisiones (IdCita, FechaAdmision , IndEnviada) VALUES (?, ?, ?)"
+        set sqlInsertarAdmision = "INSERT INTO ClinicaDental.Admision (IdCita, FechaAdmision , IndEnviada) VALUES (?, ?, ?)"
         set sc = ..Adapter.ExecuteUpdate(.numRows, sqlInsertarAdmision, pRequest.idCita, pRequest.fechaAdmision, indEnviada)
         
         // Revisa si la sentencia se ejecuta bien

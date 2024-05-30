@@ -22,7 +22,7 @@ Method altaCita(pRequest As cysnet.clinicaDental.agenda.msg.AltaCitaRequest, Out
     Try {
         
         set codEstado = 1
-        set sqlCrearCita = "INSERT INTO cysnet_clinicaDental_data.Citas (IdPaciente, DescCita, FechaCita, CodEstado) VALUES (?, ?, ?, ?)"
+        set sqlCrearCita = "INSERT INTO ClinicaDental.Cita (IdPaciente, DescCita, FechaCita, CodEstado) VALUES (?, ?, ?, ?)"
         set sc = ..Adapter.ExecuteUpdate(.numRows, sqlCrearCita, pRequest.idPaciente, pRequest.descCita, pRequest.fechaCita, codEstado)
         
         // Revisa si la sentencia se ejecuta bien
@@ -81,7 +81,7 @@ Method cancelarCita(pRequest As cysnet.clinicaDental.agenda.msg.CancelarCitaRequ
     Try {
         
         // Hacer el update del campo codEstado a 4
-        set sqlCancelarCita = "UPDATE cysnet_clinicaDental_data.Pacientes SET CodEstado = 4 WHERE ID = ?"
+        set sqlCancelarCita = "UPDATE ClinicaDental.Cita SET CodEstado = 4 WHERE ID = ?"
         set sc = ..Adapter.ExecuteUpdate(.rs, sqlCancelarCita, pRequest.idCita)
         if ($$$ISOK(sc)) {
             set pResponse.mensaje = "Cita con el ID "_pRequest.idCita_" ha sido cancelada"
@@ -122,12 +122,12 @@ Method modificarCita(pRequest As cysnet.clinicaDental.agenda.msg.ModificarCitaRe
 
     Try {
         
-        set sqlObtenerFecha = "SELECT FechaCita FROM cysnet_clinicaDental_data.Citas WHERE ID = ?"
+        set sqlObtenerFecha = "SELECT FechaCita FROM ClinicaDental.Cita WHERE ID = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerFecha, pRequest.idCita)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
 
-                set sqlModCita = "UPDATE cysnet_clinicaDental_data.Pacientes SET FechaCita = ? WHERE ID = ?"
+                set sqlModCita = "UPDATE ClinicaDental.Cita SET FechaCita = ? WHERE ID = ?"
 
                 set sc = ..Adapter.ExecuteUpdate(.numRows, sqlModCita, pRequest.fechaCitaNueva, pRequest.idCita)
                 if ($$$ISOK(sc)) {
@@ -181,10 +181,10 @@ Method listarCitas(pRequest As cysnet.clinicaDental.agenda.msg.ListarCitasReques
 
         if (pRequest.mostrarCanceladas) {
 
-            set sqlListaCitas = "SELECT * FROM cysnet_clinicaDental_data.Citas"
+            set sqlListaCitas = "SELECT * FROM ClinicaDental.Cita"
 
         } else {
-            set sqlListaCitas = "SELECT * FROM cysnet_clinicaDental_data.Citas WHERE CodEstado <> 4"
+            set sqlListaCitas = "SELECT * FROM ClinicaDental.Cita WHERE CodEstado <> 4"
         }
         
         set sc = ..Adapter.ExecuteQuery(.rs, sqlListaCitas)

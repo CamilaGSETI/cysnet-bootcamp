@@ -21,7 +21,7 @@ Method altaPaciente(pRequest As cysnet.clinicaDental.agenda.msg.AltaPacienteRequ
 
     Try {
         
-        set sqlObtenerAlta = "SELECT idCita FROM cysnet_clinicaDental_data.Altas WHERE idCita = ?"
+        set sqlObtenerAlta = "SELECT idCita FROM ClinicaDental.Alta WHERE idCita = ?"
         set sc = ..Adapter.ExecuteQuery(.rs, sqlObtenerAlta, pRequest.idCita)
         if ($$$ISOK(sc)) {
             if (rs.Next(.sc)) {
@@ -33,7 +33,7 @@ Method altaPaciente(pRequest As cysnet.clinicaDental.agenda.msg.AltaPacienteRequ
         }
         
         set indEnviada = 0
-        set sqlInsertarAlta = "INSERT INTO cysnet_clinicaDental_data.Altas (IdCita, FechaAlta , IndEnviada) VALUES (?, ?, ?)"
+        set sqlInsertarAlta = "INSERT INTO ClinicaDental.Alta (IdCita, FechaAlta , IndEnviada) VALUES (?, ?, ?)"
         set sc = ..Adapter.ExecuteUpdate(.numRows, sqlInsertarAlta, pRequest.idCita, pRequest.fechaAlta, indEnviada)
         
         // Revisa si la sentencia se ejecuta bien
